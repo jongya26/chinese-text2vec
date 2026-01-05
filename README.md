@@ -86,6 +86,44 @@ print(f'Shape: {embeddings.shape}')
 - Text clustering
 - Duplicate detection
 
+## API Usage
+
+### Running the API
+
+To start the API server, run:
+
+```bash
+uv run python api.py
+```
+
+The API will be available at `http://0.0.0.0:8000`.
+
+### Embedding Sentences
+
+Send a POST request to the `/embed` endpoint with a JSON body containing a list of sentences.
+
+**Endpoint:** `POST /embed`
+**Content-Type:** `application/json`
+
+**Example Request:**
+
+```json
+{
+    "sentences": ["今天天气很好", "上海的天气怎么样？"]
+}
+```
+
+**Example Response:**
+
+```json
+{
+    "embeddings": [
+        [0.123, 0.456, ...],
+        [0.789, 0.321, ...]
+    ]
+}
+```
+
 ## Notes
 
 - First run downloads ~400MB model
