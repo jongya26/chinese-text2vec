@@ -1,9 +1,11 @@
 [project]
 name = "chinese-text2vec"
 version = "0.1.0"
-description = "Add your description here"
+description = "A FastAPI application for Chinese Text to Vector embeddings using Sentence Transformers."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.9"
+authors = [{ name = "Jongya26", email = "jongya26@example.com" }]
+license = { text = "MIT" }
 dependencies = [
     "sentence-transformers>=5.2.0",
     "fastapi",
