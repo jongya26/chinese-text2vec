@@ -96,7 +96,7 @@ To start the API server, run:
 uv run python api.py
 ```
 
-The API will be available at `http://0.0.0.0:8000`.
+The API will be available at `http://0.0.0.0:8015`.
 
 ### Embedding Sentences
 
@@ -122,6 +122,20 @@ Send a POST request to the `/embed` endpoint with a JSON body containing a list 
         [0.789, 0.321, ...]
     ]
 }
+```
+
+## Testing
+
+To run the tests, first install `pytest` and `httpx`:
+
+```bash
+uv add pytest httpx
+```
+
+Then, run the tests using `uv`:
+
+```bash
+uv run pytest
 ```
 
 ## Notes
