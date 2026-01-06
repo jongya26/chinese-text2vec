@@ -48,3 +48,21 @@ def test_embed_invalid_input():
     # Test with list containing non-string elements
     response = client.post("/embed", json={"sentences": ["hello", 123]})
     assert response.status_code == 422  # Unprocessable Entity
+
+
+if __name__ == "__main__":
+    print("Starting API tests...")
+    try:
+        print("Running: test_embed_single_sentence")
+        test_embed_single_sentence()
+        print("Running: test_embed_multiple_sentences")
+        test_embed_multiple_sentences()
+        print("Running: test_embed_empty_sentences_list")
+        test_embed_empty_sentences_list()
+        print("Running: test_embed_invalid_input")
+        test_embed_invalid_input()
+        print("\n✅ All tests passed successfully!")
+    except Exception as e:
+        print(f"\n❌ Test failed: {e}")
+        import traceback
+        traceback.print_exc()
