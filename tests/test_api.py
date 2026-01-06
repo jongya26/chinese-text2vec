@@ -1,7 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
-from api import app  # Assuming api.py is in the project root
 import numpy as np
+import sys
+import os
+
+# Add the project root to sys.path to allow importing 'api'
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from api import app  # Assuming api.py is in the project root
 
 client = TestClient(app)
 
