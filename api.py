@@ -3,7 +3,11 @@ from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from typing import List
 
-app = FastAPI()
+app = FastAPI(
+    title="Chinese Text2Vec API",
+    description="API for generating Chinese text embeddings using Sentence Transformers.",
+    version="0.1.0",
+)
 
 # Load the Chinese text2vec model
 print("Loading model...")
