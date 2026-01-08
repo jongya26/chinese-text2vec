@@ -10,4 +10,6 @@ dependencies = [
     "sentence-transformers>=5.2.0",
     "fastapi",
     "uvicorn[standard]",
+    "pytest",
+    "httpx",
 ]
