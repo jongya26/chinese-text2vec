@@ -2,16 +2,19 @@ import pytest
 from sentence_transformers import SentenceTransformer
 import numpy as np
 
+
 @pytest.fixture(scope="module")
 def model():
     """Fixture to load the model once for all tests in this module."""
     print("Loading model for unit tests...")
     return SentenceTransformer("shibing624/text2vec-base-chinese")
 
+
 def test_model_loading(model):
     """Test that the model loads successfully."""
     assert isinstance(model, SentenceTransformer)
     assert model.max_seq_length > 0
+
 
 def test_embeddings_shape(model):
     """Test that the embeddings have the correct shape."""
@@ -19,6 +22,7 @@ def test_embeddings_shape(model):
     embeddings = model.encode(sentences)
     assert embeddings.shape == (len(sentences), 768)
     assert embeddings.dtype == np.float32
+
 
 def test_similarity_score(model):
     """Test similarity scores for known similar and dissimilar sentences."""
