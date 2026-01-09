@@ -23,6 +23,3 @@ class SentenceRequest(BaseModel):
 async def embed_sentences(request: SentenceRequest):
     embeddings = model.encode(request.sentences).tolist()
     return {"embeddings": embeddings}
-
-
-
