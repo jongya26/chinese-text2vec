@@ -13,3 +13,6 @@ dependencies = [
     "pytest",
     "httpx",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
