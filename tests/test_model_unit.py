@@ -39,6 +39,10 @@ def test_similarity_score(model):
     similarity_1_2 = model.similarity(embedding1, embedding2).item()
     similarity_1_3 = model.similarity(embedding1, embedding3).item()
 
+    # Print results for observation
+    print(f"\nSimilarity between sentence 1 and 2: {similarity_1_2:.4f}")
+    print(f"Similarity between sentence 1 and 3: {similarity_1_3:.4f}")
+
     # Assertions
     assert similarity_1_2 > 0.8  # Very similar
     assert similarity_1_3 < 0.5  # Dissimilar
