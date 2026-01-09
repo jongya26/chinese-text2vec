@@ -132,10 +132,10 @@ To run the tests, first install `pytest` and `httpx`:
 uv add pytest httpx
 ```
 
-Then, run the tests using `uv`:
+Then, run the tests using `uv` (use `-s` to see print output):
 
 ```bash
-uv run env PYTHONPATH=. pytest
+uv run env PYTHONPATH=. pytest -s
 ```
 
 ## Notes
