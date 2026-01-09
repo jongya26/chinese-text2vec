@@ -1,63 +1,57 @@
 # Chinese Text2Vec API
 
-A FastAPI application that provides a simple API for generating high-quality Chinese text embeddings using the `shibing624/text2vec-base-chinese` Sentence Transformer model. This API is optimized for performance and ease of use.
+This project provides a straightforward FastAPI service for converting Chinese text into high-quality vector embeddings. It leverages the powerful `shibing624/text2vec-base-chinese` Sentence Transformer model, offering an easy-to-integrate solution for various NLP tasks.
 
-## Features
+## Key Features
 
-*   **Fast Chinese Text Embeddings**: Utilizes the `shibing624/text2vec-base-chinese` model for efficient text vectorization.
-*   **Simple RESTful API**: Easily integrate text embedding capabilities into your applications.
-*   **Optimized for Apple Silicon**: Leverages hardware acceleration for faster processing on compatible devices.
+*   **Chinese Text Embeddings**: Generate 768-dimensional vector representations for Chinese sentences.
+*   **Simple RESTful API**: Easily integrate text embedding capabilities into any application via a standard HTTP POST request.
+*   **Performance Optimized**: Utilizes the efficient Sentence Transformers library and is optimized for platforms like Apple Silicon.
 
-## API Usage
+## Quick Start (for API Consumers)
 
-### Running the API Server
+### 1. Run the API Server
 
-To start the API server, ensure you have `uv` installed (https://astral.sh/uv/install.sh), then run:
+Ensure you have `uv` installed ([installation guide](https://astral.sh/uv/install.sh)).
 
 ```bash
 uv run python main.py
 ```
 
-The API will be available at `http://0.0.0.0:8015`.
+The API will start on `http://0.0.0.0:8015`.
 
-### Endpoint: `/embed`
+### 2. Send an Embedding Request
 
-This endpoint generates embeddings for a list of Chinese sentences.
+Use a tool like `curl` to send a POST request to the `/embed` endpoint.
 
-*   **Method**: `POST`
-*   **URL**: `/embed`
-*   **Content-Type**: `application/json`
-
-#### Request Body
-
-A JSON object with a single key `sentences` which is a list of strings (Chinese sentences).
-
-```json
-{
-    "sentences": ["今天天气很好", "上海的天气怎么样？", "如何更换花呗绑定银行卡"]
-}
+```bash
+curl -X POST "http://0.0.0.0:8015/embed" \
+     -H "Content-Type: application/json" \
+     -d '{ "sentences": ["今天天气很好", "上海的天气怎么样？"] }'
 ```
 
-#### Response Body
+#### Expected Response
 
-A JSON object containing the `embeddings` key, which is a list of lists of floats. Each inner list represents the 768-dimensional embedding vector for the corresponding input sentence.
+The API will return a JSON object containing the embeddings:
 
 ```json
 {
     "embeddings": [
         [0.123, 0.456, ..., 0.789],
-        [0.789, 0.321, ..., 0.654],
-        [0.456, 0.789, ..., 0.123]
+        [0.789, 0.321, ..., 0.654]
     ]
 }
 ```
 
+Each inner list represents the 768-dimensional embedding vector for the corresponding input sentence.
+
 ## Embedding Details
 
-*   **Embedding Dimension**: Each sentence is transformed into a 768-dimensional vector.
-*   **Similarity Scores**: While not directly exposed by the API, embeddings can be used to calculate semantic similarity (e.g., cosine similarity). A higher score (closer to 1) indicates greater similarity.
+*   **Output Format**: Each input sentence is transformed into a 768-dimensional float vector.
+*   **Applications**: These embeddings can be used for tasks such as semantic search, document similarity, clustering, and more.
+*   **Similarity**: Higher cosine similarity between two embedding vectors indicates that their corresponding sentences are more semantically related (values typically range from 0 to 1).
 
 ## Resources
 
-*   **Model Card**: [shibing624/text2vec-base-chinese](https://huggingface.co/shibing624/text2vec-base-chinese)
-*   **Sentence Transformers Documentation**: [sbert.net](https://www.sbert.net/)
+*   **Underlying Model**: `shibing624/text2vec-base-chinese` on Hugging Face ([Model Card](https://huggingface.co/shibing624/text2vec-base-chinese))
+*   **Sentence Transformers Library**: Official documentation ([sbert.net](https://www.sbert.net/))
