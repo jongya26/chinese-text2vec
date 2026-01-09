@@ -12,8 +12,6 @@ This project provides a straightforward FastAPI service for converting Chinese t
 
 ### 1. Run the API Server
 
-Ensure you have `uv` installed ([installation guide](https://astral.sh/uv/install.sh)).
-
 ```bash
 uv run python main.py
 ```

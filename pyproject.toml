@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A FastAPI application for Chinese Text to Vector embeddings using Sentence Transformers."
 readme = "README.md"
 requires-python = ">=3.11"
-authors = [{ name = "Jongya26", email = "jongya26@example.com" }]
+authors = [{ name = "Jongya26", email = "jongya26@gmail.com" }]
 license = { text = "MIT" }
 dependencies = [
     "sentence-transformers>=5.2.0",
