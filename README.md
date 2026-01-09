@@ -1,96 +1,18 @@
-# Chinese Text2Vec with Sentence Transformers
+# Chinese Text2Vec API
 
-A quick setup guide for using `shibing624/text2vec-base-chinese` model with sentence-transformers on macOS (M1/M2/M3).
+A FastAPI application that provides a simple API for generating high-quality Chinese text embeddings using the `shibing624/text2vec-base-chinese` Sentence Transformer model. This API is optimized for performance and ease of use.
 
-## Prerequisites
+## Features
 
-- macOS with Apple Silicon (M1/M2/M3)
-- Terminal access
-
-## Setup
-
-### 1. Install uv
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source $HOME/.cargo/env
-```
-
-### 2. Create Project
-
-```bash
-mkdir chinese-text2vec
-cd chinese-text2vec
-uv init
-```
-
-### 3. Install Dependencies
-
-```bash
-uv add sentence-transformers
-```
-
-## Quick Start
-
-### Basic Usage
-
-Create `example.py`:
-
-```python
-from sentence_transformers import SentenceTransformer
-
-# Load model
-model = SentenceTransformer('shibing624/text2vec-base-chinese')
-
-# Encode sentences
-sentences = ['如何更换花呗绑定银行卡', '花呗更改绑定银行卡', '今天天气很好']
-embeddings = model.encode(sentences)
-
-# Calculate similarity
-similarity = model.similarity(embeddings[0], embeddings[1])
-print(f"Similarity: {similarity.item():.4f}")
-```
-
-Run:
-
-```bash
-uv run python example.py
-```
-
-### One-liner Test
-
-```bash
-uv run --with sentence-transformers python -c "
-from sentence_transformers import SentenceTransformer
-model = SentenceTransformer('shibing624/text2vec-base-chinese')
-embeddings = model.encode(['你好世界', '再见世界'])
-print(f'Shape: {embeddings.shape}')
-"
-```
-
-## Understanding Results
-
-- **Similarity score**: Range from 0 to 1
-  - `> 0.8`: Very similar meaning
-  - `0.5 - 0.8`: Somewhat related
-  - `< 0.5`: Different topics
-
-- **Embedding shape**: `(num_sentences, 768)`
-  - Each sentence becomes a 768-dimensional vector
-
-## Common Use Cases
-
-- Semantic search
-- Document similarity comparison
-- Question-answer matching
-- Text clustering
-- Duplicate detection
+*   **Fast Chinese Text Embeddings**: Utilizes the `shibing624/text2vec-base-chinese` model for efficient text vectorization.
+*   **Simple RESTful API**: Easily integrate text embedding capabilities into your applications.
+*   **Optimized for Apple Silicon**: Leverages hardware acceleration for faster processing on compatible devices.
 
 ## API Usage
 
-### Running the API
+### Running the API Server
 
-To start the API server, run:
+To start the API server, ensure you have `uv` installed (https://astral.sh/uv/install.sh), then run:
 
 ```bash
 uv run python main.py
@@ -98,54 +20,44 @@ uv run python main.py
 
 The API will be available at `http://0.0.0.0:8015`.
 
-### Embedding Sentences
+### Endpoint: `/embed`
 
-Send a POST request to the `/embed` endpoint with a JSON body containing a list of sentences.
+This endpoint generates embeddings for a list of Chinese sentences.
 
-**Endpoint:** `POST /embed`
-**Content-Type:** `application/json`
+*   **Method**: `POST`
+*   **URL**: `/embed`
+*   **Content-Type**: `application/json`
 
-**Example Request:**
+#### Request Body
+
+A JSON object with a single key `sentences` which is a list of strings (Chinese sentences).
 
 ```json
 {
-    "sentences": ["今天天气很好", "上海的天气怎么样？"]
+    "sentences": ["今天天气很好", "上海的天气怎么样？", "如何更换花呗绑定银行卡"]
 }
 ```
 
-**Example Response:**
+#### Response Body
+
+A JSON object containing the `embeddings` key, which is a list of lists of floats. Each inner list represents the 768-dimensional embedding vector for the corresponding input sentence.
 
 ```json
 {
     "embeddings": [
-        [0.123, 0.456, ...],
-        [0.789, 0.321, ...]
+        [0.123, 0.456, ..., 0.789],
+        [0.789, 0.321, ..., 0.654],
+        [0.456, 0.789, ..., 0.123]
     ]
 }
 ```
 
-## Testing
+## Embedding Details
 
-To run the tests, first install `pytest` and `httpx`:
-
-```bash
-uv add pytest httpx
-```
-
-Then, run the tests using `uv` (use `-s` to see print output):
-
-```bash
-uv run env PYTHONPATH=. pytest -s
-```
-
-## Notes
-
-- First run downloads ~400MB model
-- Model cached in `~/.cache/huggingface/`
-- Optimized for Apple Silicon
+*   **Embedding Dimension**: Each sentence is transformed into a 768-dimensional vector.
+*   **Similarity Scores**: While not directly exposed by the API, embeddings can be used to calculate semantic similarity (e.g., cosine similarity). A higher score (closer to 1) indicates greater similarity.
 
 ## Resources
 
-- [Model Card](https://huggingface.co/shibing624/text2vec-base-chinese)
-- [Sentence Transformers Docs](https://www.sbert.net/)
-
+*   **Model Card**: [shibing624/text2vec-base-chinese](https://huggingface.co/shibing624/text2vec-base-chinese)
+*   **Sentence Transformers Documentation**: [sbert.net](https://www.sbert.net/)
