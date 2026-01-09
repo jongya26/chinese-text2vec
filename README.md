@@ -93,7 +93,7 @@ print(f'Shape: {embeddings.shape}')
 To start the API server, run:
 
 ```bash
-uv run python api.py
+uv run python main.py
 ```
 
 The API will be available at `http://0.0.0.0:8015`.
