@@ -135,7 +135,7 @@ uv add pytest httpx
 Then, run the tests using `uv`:
 
 ```bash
-uv run pytest
+uv run env PYTHONPATH=. pytest
 ```
 
 ## Notes
