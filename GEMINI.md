@@ -24,6 +24,10 @@
 *   **Configuration (`pyproject.toml`, `.env`):**
     *   `pyproject.toml`: Manages project metadata and dependencies.
     *   `.env`: (Optional) Environment variables for server settings (`HOST`, `PORT`) and model selection (`MODEL_NAME`). See `.env.example`.
+*   **Documentation:**
+    *   `README.md`: English documentation and quick start guide.
+    *   `README_zh.md`: Chinese documentation.
+    *   `GEMINI.md`: Detailed project context and architecture for LLM agents.
 
 ## Building and Running
 

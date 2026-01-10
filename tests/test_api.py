@@ -40,7 +40,7 @@ def test_embed_empty_sentences_list(client):
     # Empty list is now invalid (min_length=1)
     response = client.post("/embed", json={"sentences": []})
     assert response.status_code == 422
-    
+
 
 def test_embed_invalid_input(client):
     # Test with missing "sentences" key
@@ -73,4 +73,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n❌ Test failed: {e}")
         import traceback
+
         traceback.print_exc()

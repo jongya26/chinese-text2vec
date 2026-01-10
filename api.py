@@ -11,6 +11,7 @@ MODEL_NAME = os.getenv("MODEL_NAME", "shibing624/text2vec-base-chinese")
 MAX_BATCH_SIZE = 32
 MAX_SENTENCE_LENGTH = 512
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Load the ML model
@@ -25,6 +26,7 @@ async def lifespan(app: FastAPI):
     # Clean up resources if needed
     print("Shutting down...")
 
+
 app = FastAPI(
     title="Chinese Text2Vec API",
     description="API for generating Chinese text embeddings using Sentence Transformers.",
@@ -35,10 +37,10 @@ app = FastAPI(
 
 class SentenceRequest(BaseModel):
     sentences: List[str] = Field(
-        ..., 
-        min_length=1, 
-        max_length=MAX_BATCH_SIZE, 
-        description=f"List of sentences to embed (max {MAX_BATCH_SIZE})"
+        ...,
+        min_length=1,
+        max_length=MAX_BATCH_SIZE,
+        description=f"List of sentences to embed (max {MAX_BATCH_SIZE})",
     )
 
     @field_validator("sentences")
@@ -46,9 +48,13 @@ class SentenceRequest(BaseModel):
     def validate_sentence_length(cls, v: List[str]) -> List[str]:
         for i, sentence in enumerate(v):
             if len(sentence) > MAX_SENTENCE_LENGTH:
-                raise ValueError(f"Sentence at index {i} exceeds {MAX_SENTENCE_LENGTH} characters.")
+                raise ValueError(
+                    f"Sentence at index {i} exceeds {MAX_SENTENCE_LENGTH} characters."
+                )
             if not sentence.strip():
-                 raise ValueError(f"Sentence at index {i} cannot be empty or whitespace only.")
+                raise ValueError(
+                    f"Sentence at index {i} cannot be empty or whitespace only."
+                )
         return v
 
 
