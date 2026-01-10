@@ -1,5 +1,7 @@
 # Chinese Text2Vec API
 
+English | [简体中文](./README_zh.md)
+
 This project provides a straightforward FastAPI service for converting Chinese text into high-quality vector embeddings. It leverages the powerful `shibing624/text2vec-base-chinese` Sentence Transformer model, offering an easy-to-integrate solution for various NLP tasks.
 
 ## Key Features
