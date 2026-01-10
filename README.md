@@ -10,15 +10,28 @@ This project provides a straightforward FastAPI service for converting Chinese t
 
 ## Quick Start (for API Consumers)
 
-### 1. Run the API Server
+### 1. Configuration (Optional)
+
+You can configure the server host, port, and model using environment variables.
+
+1.  Copy the example environment file:
+    ```bash
+    cp .env.example .env
+    ```
+2.  Edit `.env` to suit your needs:
+    *   `HOST`: The interface to bind to (default: `0.0.0.0`).
+    *   `PORT`: The port to run on (default: `8015`).
+    *   `MODEL_NAME`: The Sentence Transformer model to load (default: `shibing624/text2vec-base-chinese`).
+
+### 2. Run the API Server
 
 ```bash
 uv run python main.py
 ```
 
-The API will start on `http://0.0.0.0:8015`.
+The API will start on `http://0.0.0.0:8015` (or your configured host/port).
 
-### 2. Send an Embedding Request
+### 3. Send an Embedding Request
 
 Use a tool like `curl` to send a POST request to the `/embed` endpoint.
 
