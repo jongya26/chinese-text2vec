@@ -21,7 +21,9 @@
     *   Defines the FastAPI application `app`.
     *   Loads the `shibing624/text2vec-base-chinese` model upon startup.
     *   Exposes a POST endpoint `/embed` that accepts a list of sentences and returns their 768-dimensional vector embeddings.
-*   **Configuration (`pyproject.toml`):** Manages project metadata and dependencies.
+*   **Configuration (`pyproject.toml`, `.env`):**
+    *   `pyproject.toml`: Manages project metadata and dependencies.
+    *   `.env`: (Optional) Environment variables for server settings (`HOST`, `PORT`) and model selection (`MODEL_NAME`). See `.env.example`.
 
 ## Building and Running
 
@@ -35,12 +37,18 @@ Install dependencies using `uv`:
 uv sync
 ```
 
+### Configuration
+Copy `.env.example` to `.env` to customize settings:
+```bash
+cp .env.example .env
+```
+
 ### Running the API
 Start the development server:
 ```bash
 uv run python main.py
 ```
-The server will start on `http://0.0.0.0:8015`.
+The server will start on `http://0.0.0.0:8015` (default).
 
 ### API Usage
 **Endpoint:** `POST /embed`
