@@ -1,6 +1,5 @@
 import pytest
 from fastapi.testclient import TestClient
-import numpy as np
 import sys
 import os
 
@@ -9,10 +8,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from api import app  # Assuming api.py is in the project root
 
-client = TestClient(app)
+
+@pytest.fixture(scope="module")
+def client():
+    with TestClient(app) as c:
+        yield c
 
 
-def test_embed_single_sentence():
+def test_embed_single_sentence(client):
     response = client.post("/embed", json={"sentences": ["今天天气很好"]})
     assert response.status_code == 200
     data = response.json()
@@ -22,7 +25,7 @@ def test_embed_single_sentence():
     assert len(data["embeddings"][0]) == 768  # Assuming 768-dimensional embeddings
 
 
-def test_embed_multiple_sentences():
+def test_embed_multiple_sentences(client):
     sentences = ["你好世界", "再见世界", "今天上海天气怎么样？"]
     response = client.post("/embed", json={"sentences": sentences})
     assert response.status_code == 200
@@ -33,16 +36,13 @@ def test_embed_multiple_sentences():
     assert all(len(emb) == 768 for emb in data["embeddings"])
 
 
-def test_embed_empty_sentences_list():
+def test_embed_empty_sentences_list(client):
+    # Empty list is now invalid (min_length=1)
     response = client.post("/embed", json={"sentences": []})
-    assert response.status_code == 200
-    data = response.json()
-    assert "embeddings" in data
-    assert isinstance(data["embeddings"], list)
-    assert len(data["embeddings"]) == 0
+    assert response.status_code == 422
+    
 
-
-def test_embed_invalid_input():
+def test_embed_invalid_input(client):
     # Test with missing "sentences" key
     response = client.post("/embed", json={"text": ["some text"]})
     assert response.status_code == 422  # Unprocessable Entity
@@ -57,17 +57,19 @@ def test_embed_invalid_input():
 
 
 if __name__ == "__main__":
-    print("Starting API tests...")
+    # For manual running, we need to replicate the fixture logic
+    print("Starting API tests manually...")
     try:
-        print("Running: test_embed_single_sentence")
-        test_embed_single_sentence()
-        print("Running: test_embed_multiple_sentences")
-        test_embed_multiple_sentences()
-        print("Running: test_embed_empty_sentences_list")
-        test_embed_empty_sentences_list()
-        print("Running: test_embed_invalid_input")
-        test_embed_invalid_input()
-        print("\n✅ All tests passed successfully!")
+        with TestClient(app) as client:
+            print("Running: test_embed_single_sentence")
+            test_embed_single_sentence(client)
+            print("Running: test_embed_multiple_sentences")
+            test_embed_multiple_sentences(client)
+            print("Running: test_embed_empty_sentences_list")
+            test_embed_empty_sentences_list(client)
+            print("Running: test_embed_invalid_input")
+            test_embed_invalid_input(client)
+            print("\n✅ All tests passed successfully!")
     except Exception as e:
         print(f"\n❌ Test failed: {e}")
         import traceback
