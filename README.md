@@ -14,16 +14,14 @@ This project provides a straightforward FastAPI service for converting Chinese t
 
 ### 1. Configuration (Optional)
 
-You can configure the server host, port, and model using environment variables.
+You can configure the default model using environment variables.
 
 1.  Copy the example environment file:
     ```bash
     cp .env.example .env
     ```
 2.  Edit `.env` to suit your needs:
-    *   `HOST`: The interface to bind to (default: `0.0.0.0`).
-    *   `PORT`: The port to run on (default: `8015`).
-    *   `MODEL_NAME`: The Sentence Transformer model to load (default: `shibing624/text2vec-base-chinese`).
+    *   `MODEL_NAME`: The default model key (e.g., `bge-small-zh-v1.5`).
 
 ### 2. Run the API Server
 
@@ -31,32 +29,50 @@ You can configure the server host, port, and model using environment variables.
 uv run python main.py
 ```
 
-The API will start on `http://0.0.0.0:8015` (or your configured host/port).
+### 3. Discover Models
 
-### 3. Send an Embedding Request
-
-Use a tool like `curl` to send a POST request to the `/embed` endpoint.
+Get a list of all supported models and their specifications:
 
 ```bash
-curl -X POST "http://0.0.0.0:8015/embed" \
+curl http://0.0.0.0:8015/v1/models
+```
+
+### 4. Send an Embedding Request (Standard API)
+
+Use the standard `/v1/embeddings` endpoint. You can specify different models for different languages.
+
+```bash
+curl -X POST "http://0.0.0.0:8015/v1/embeddings" \
      -H "Content-Type: application/json" \
-     -d '{ "sentences": ["今天天气很好", "上海的天气怎么样？"] }'
+     -d '{
+       "input": ["今天天气很好", "Hello world"],
+       "model": "multilingual-e5-small"
+     }'
 ```
 
 #### Expected Response
 
-The API will return a JSON object containing the embeddings:
-
 ```json
 {
-    "embeddings": [
-        [0.123, 0.456, ..., 0.789],
-        [0.789, 0.321, ..., 0.654]
-    ]
+  "object": "list",
+  "data": [
+    { "object": "embedding", "embedding": [...], "index": 0 },
+    { "object": "embedding", "embedding": [...], "index": 1 }
+  ],
+  "model": "multilingual-e5-small",
+  "usage": { "prompt_tokens": 17, "total_tokens": 17 }
 }
 ```
 
-Each inner list represents the 768-dimensional embedding vector for the corresponding input sentence.
+## Supported Models
+
+| Model Key | Language | Dims | Description |
+| :--- | :--- | :--- | :--- |
+| `text2vec-base-chinese` | ZH | 768 | Default balanced Chinese model. |
+| `bge-small-zh-v1.5` | ZH | 512 | High efficiency Chinese model. |
+| `bge-large-zh-v1.5` | ZH | 1024 | SOTA large Chinese model. |
+| `all-MiniLM-L6-v2` | EN | 384 | Popular fast English model. |
+| `multilingual-e5-small` | Multilingual | 384 | Excellent EN/ZH/Multilingual support. |
 
 ## Embedding Details
 
