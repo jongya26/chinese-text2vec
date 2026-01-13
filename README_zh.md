@@ -14,16 +14,14 @@
 
 ### 1. 配置（可选）
 
-您可以使用环境变量来配置服务器的主机、端口和模型。
+您可以使用环境变量来配置默认模型。
 
 1.  复制示例环境变量文件：
     ```bash
     cp .env.example .env
     ```
 2.  根据需要编辑 `.env`：
-    *   `HOST`: 绑定接口（默认：`0.0.0.0`）。
-    *   `PORT`: 运行端口（默认：`8015`）。
-    *   `MODEL_NAME`: 加载的 Sentence Transformer 模型（默认：`shibing624/text2vec-base-chinese`）。
+    *   `MODEL_NAME`: 默认模型名称（例如：`bge-small-zh-v1.5`）。
 
 ### 2. 运行 API 服务器
 
@@ -31,32 +29,50 @@
 uv run python main.py
 ```
 
-API 将在 `http://0.0.0.0:8015`（或您配置的主机/端口）启动。
+### 3. 查看可用模型
 
-### 3. 发送嵌入请求
-
-使用 `curl` 等工具向 `/embed` 接口发送 POST 请求。
+获取所有支持的模型及其详细信息：
 
 ```bash
-curl -X POST "http://0.0.0.0:8015/embed" \
+curl http://0.0.0.0:8015/v1/models
+```
+
+### 4. 发送嵌入请求 (标准 API)
+
+使用标准的 `/v1/embeddings` 接口。您可以为不同的语言选择不同的模型。
+
+```bash
+curl -X POST "http://0.0.0.0:8015/v1/embeddings" \
      -H "Content-Type: application/json" \
-     -d '{ "sentences": ["今天天气很好", "上海的天气怎么样？"] }'
+     -d '{
+       "input": ["今天天气很好", "Hello world"],
+       "model": "multilingual-e5-small"
+     }'
 ```
 
 #### 预期响应
 
-API 将返回包含嵌入向量的 JSON 对象：
-
 ```json
 {
-    "embeddings": [
-        [0.123, 0.456, ..., 0.789],
-        [0.789, 0.321, ..., 0.654]
-    ]
+  "object": "list",
+  "data": [
+    { "object": "embedding", "embedding": [...], "index": 0 },
+    { "object": "embedding", "embedding": [...], "index": 1 }
+  ],
+  "model": "multilingual-e5-small",
+  "usage": { "prompt_tokens": 17, "total_tokens": 17 }
 }
 ```
 
-每个内部列表代表对应输入句子的 768 维嵌入向量。
+## 支持的模型
+
+| 模型名称 | 推荐语言 | 维度 | 描述 |
+| :--- | :--- | :--- | :--- |
+| `text2vec-base-chinese` | 中文 | 768 | 默认的平衡中文模型。 |
+| `bge-small-zh-v1.5` | 中文 | 512 | BAAI 出品的高效率中文模型。 |
+| `bge-large-zh-v1.5` | 中文 | 1024 | SOTA 级别的中文大模型。 |
+| `all-MiniLM-L6-v2` | 英文 | 384 | 流行且快速的英文模型。 |
+| `multilingual-e5-small` | 多语言 | 384 | 优秀的英/中/多语言支持。 |
 
 ## 嵌入详情
 
